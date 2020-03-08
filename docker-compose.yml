@@ -1,0 +1,74 @@
+version: "2.0"
+services:
+    php:
+        image: registry.cn-hangzhou.aliyuncs.com/flydany/php73-fpm
+        container_name: locate.php
+        restart: always
+        volumes: 
+            - ./php/php.ini:/usr/local/etc/php/php.ini
+            # docker-php-ext-install 安装的扩展会安装到此处
+            # - ./php/extensions:/usr/local/lib/php/extensions/no-debug-non-zts-20180731
+            - ./apps:/var/www/html
+            - ./runtime/php:/var/www/log/php
+        restart: always
+        expose:
+            - 9000
+        ports:
+           - 9000:9000
+        networks: 
+            - locatenet
+
+    mysql:
+        image: mysql:5.7
+        container_name: locate.mysql
+        environment: 
+            - "MYSQL_ROOT_PASSWORD=123456"
+            - "TZ=Asia/Shanghai"
+        restart: always
+        volumes: 
+            - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+            - ./data/mysql:/var/lib/mysql
+            - ./runtime/mysql:/var/www/log/mysql
+        expose:
+            - 3306
+        ports: 
+            - 3306:3306
+        networks: 
+            - locatenet
+
+    redis:
+        image: redis
+        container_name: locate.redis
+        restart: always
+        command: redis-server --appendonly yes
+        environment: 
+            - "REDIS_PASSWORD=123456"
+        volumes: 
+            - ./redis/redis.conf:/etc/redis/redis.conf
+            - ./data/redis:/data
+            - ./runtime/redis:/var/www/log/redis
+        ports: 
+            - 6379:6379
+        networks: 
+            - locatenet
+
+    nginx:
+        image: nginx
+        container_name: locate.nginx
+        environment: 
+            - "TZ=Asia/Shanghai"
+        volumes: 
+            - ./nginx/servers:/etc/nginx/conf.d
+            - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+            - ./apps:/var/www/html
+            - ./runtime/nginx:/var/www/log/nginx
+        expose:
+            - 80
+        ports: 
+            - 8080:80
+        networks: 
+            - locatenet
+
+networks: 
+    locatenet:
+    

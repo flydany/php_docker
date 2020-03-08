@@ -1,0 +1,4 @@
+# 不提交本目录下的所有文件（.gitignore除外）
+*
+
+!.gitignore
