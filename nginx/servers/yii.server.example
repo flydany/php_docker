@@ -1,0 +1,42 @@
+
+server {
+    listen       80;
+    server_name   admin.shop.net;
+    root   /var/www/html/shop.yii/admin/web/;
+    index  index.php index.html index.htm;
+
+    # charset utf8;
+    
+    access_log  /var/www/log/nginx/shop.yii.admin.access.log  main;
+    error_log /var/www/log/nginx/shop.yii.admin.error.log warn;
+
+    location / {
+        try_files $uri $uri/ /index.php$is_args$args;
+    }
+
+    # error_page  404              /404.html;
+
+    # redirect server error pages to the static page /50x.html
+    #
+    error_page   500 502 503 504  /50x.html;
+    # location = /50x.html {
+    #     root   /var/www/html/shop.yii/admin/web/;
+    # }
+
+    # pass the PHP scripts to FastCGI server listening on docker container locate.php:9000
+    #
+    location ~ \.php$ {
+        fastcgi_pass    locate.php:9000;
+        fastcgi_index   index.php;
+        include         fastcgi_params;
+        fastcgi_param   SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+        fastcgi_param   PATH_INFO $fastcgi_path_info;
+    }
+
+    # deny access to .htaccess files, if Apache's document root
+    # concurs with nginx's one
+    #
+    location ~ /\.ht {
+        deny  all;
+    }
+}
