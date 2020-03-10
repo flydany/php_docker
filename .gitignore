@@ -1,0 +1,5 @@
+# 忽略编辑器文件
+.idea
+
+.DS_Store
+*/.DS_Store
