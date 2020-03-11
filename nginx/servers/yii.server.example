@@ -19,9 +19,6 @@ server {
     # redirect server error pages to the static page /50x.html
     #
     error_page   500 502 503 504  /50x.html;
-    # location = /50x.html {
-    #     root   /var/www/html/shop.yii/admin/web/;
-    # }
 
     # pass the PHP scripts to FastCGI server listening on docker container locate.php:9000
     #
