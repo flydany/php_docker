@@ -19,19 +19,16 @@ RUN echo "deb http://mirrors.aliyun.com/debian/ stretch main non-free contrib" >
     
 # 安装依赖,核心扩展,pecl扩展,git,composer,npm工具
 # 相关依赖必须手动安装
-RUN apt-get update && apt-get install --allow-downgrades -y  zlib1g=1:1.2.8.dfsg-5 \
-        zlib1g-dev \
-        libbz2-1.0 \
-        libwebp-dev \
-        libjpeg-dev \
-        libpng-dev \
-        libfreetype6-dev \
+# RUN apt-get update && apt-get install -y libwebp-dev libjpeg62-turbo-dev libpng-dev libxpm-dev \
+    # && apt-get update && apt-get install -y zlib1g=1:1.2.8.dfsg-5 zlib1g-dev libbz2-1.0 libzip-dev libwebp-dev \
+RUN apt-get update && apt-get install -y libwebp-dev libjpeg62-turbo-dev libpng-dev libxpm-dev libfreetype6-dev \
+    && apt-get update && apt-get install -y zlib1g-dev libzip-dev \
     # 安装扩展
-    # && docker-php-source extract \
-    # && docker-php-ext-install -j$(nproc) redis bcmath iconv mbstring mysqli \
-    # && cd /usr/src/php/ext/gd \
-    # && docker-php-ext-configure gd --with-webp-dir=/usr/include/webp --with-jpeg-dir=/usr/include --with-png-dir=/usr/include --with-freetype-dir=/usr/include/freetype2 \
-    # && docker-php-ext-install -j$(nproc) gd \
+    && docker-php-source extract \
+    # && docker-php-ext-install -j$(nproc) bcmath zip iconv mbstring mysqli pdo pdo_mysql \
+    && cd /usr/src/php/ext/gd \
+    && docker-php-ext-configure gd --with-gd --with-webp-dir --with-jpeg-dir --with-png-dir --with-zlib-dir --with-xpm-dir --with-freetype-dir --enable-gd-native-ttf \
+    && docker-php-ext-install -j$(nproc) gd \
     # 删除安装包？
     && rm -rf /var/lib/apt/lists/*
 
