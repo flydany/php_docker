@@ -4,6 +4,8 @@ services:
         image: registry.cn-hangzhou.aliyuncs.com/flydany/php73-fpm
         # image: tphp
         container_name: locate.php
+        environment: 
+            - "TZ=Asia/Shanghai"
         restart: always
         volumes: 
             - ./php/php.ini:/usr/local/etc/php/php.ini
@@ -44,6 +46,7 @@ services:
         command: redis-server --appendonly yes
         environment: 
             - "REDIS_PASSWORD=123456"
+            - "TZ=Asia/Shanghai"
         volumes: 
             - ./redis/redis.conf:/etc/redis/redis.conf
             - ./data/redis:/data
