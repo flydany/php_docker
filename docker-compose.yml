@@ -2,7 +2,6 @@ version: "2.1"
 services:
     php:
         image: registry.cn-hangzhou.aliyuncs.com/flydany/php73-fpm
-        # image: tphp
         container_name: locate.php
         environment: 
             - "TZ=Asia/Shanghai"
