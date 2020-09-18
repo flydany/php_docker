@@ -1,15 +1,15 @@
-version: "3.0"
+version: "2.1"
 services:
     php:
-        image: registry.cn-hangzhou.aliyuncs.com/flydany/php74-fpm
+        image: registry.cn-hangzhou.aliyuncs.com/flydany/php73-fpm
         container_name: locate.php
         environment: 
             - "TZ=Asia/Shanghai"
         restart: always
         volumes: 
-            - ./php/7.4/php.ini:/usr/local/etc/php/php.ini
+            - ./php/7.35/php.ini:/usr/local/etc/php/php.ini
             # docker-php-ext-install 安装的扩展会安装到此处
-            # - ./php/7.4/extensions:/usr/local/lib/php/extensions/no-debug-non-zts-20180731
+            # - ./php/7.35/extensions:/usr/local/lib/php/extensions/no-debug-non-zts-20180731
             - ./apps:/var/www/html
             - ./runtime/php:/var/www/log/php
         restart: always
