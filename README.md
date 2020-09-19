@@ -14,6 +14,7 @@ docker php enviroment
 
 # php-fpm
 version         ->   7.3.5
+version         ->   7.4
 
 # redis
 version         ->   latest
@@ -23,3 +24,11 @@ version         ->   5.7
 
 # nginx
 version         ->   latest
+
+
+
+# 脚本
+./start.sh  PHP版本号    => 启动
+./stop.sh  PHP版本号    => 关闭
+./down.sh  PHP版本号    => 关闭并删除
+注：PHP版本号仅支持7.35 | 7.4，默认为7.4

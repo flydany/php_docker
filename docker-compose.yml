@@ -8,6 +8,7 @@ services:
         restart: always
         volumes: 
             - ./php/7.4/php.ini:/usr/local/etc/php/php.ini
+            - ./php/7.4/conf.d:/usr/local/etc/php/conf.d
             # docker-php-ext-install 安装的扩展会安装到此处
             # - ./php/7.4/extensions:/usr/local/lib/php/extensions/no-debug-non-zts-20180731
             - ./apps:/var/www/html

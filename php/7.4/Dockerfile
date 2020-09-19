@@ -23,14 +23,8 @@ RUN echo "deb http://mirrors.aliyun.com/debian/ buster main non-free contrib \n 
         libjpeg62-turbo-dev \
         libmcrypt-dev \
         libpng-dev \
-    && docker-php-ext-install -j$(nproc) gd iconv  pdo_mysql \
+    && docker-php-ext-install -j$(nproc) gd iconv pdo_mysql \
     && pecl install redis-5.1.1 \
     && pecl install imagick \
     && pecl install mcrypt \
     && docker-php-ext-enable redis imagick mcrypt
-
-
-
-
-
-    gd.so  iconv.so  imagick.so  mcrypt.so	opcache.so  pdo_mysql.so  redis.so  sodium.so
