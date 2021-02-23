@@ -1,30 +1,52 @@
-FROM php:7.4-fpm
+FROM php:7.4.1-apache
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  autoconf \
+  build-essential \
+  apt-utils \
+  zlib1g-dev \
+  libzip-dev \
+  unzip \
+  zip \
+  libmagick++-dev \
+  libmagickwand-dev \
+  libpq-dev \
+  libfreetype6-dev \
+  libjpeg62-turbo-dev \
+  libpng-dev \
+  libwebp-dev \ 
+  libxpm-dev 
 
-# COPY ./extensions /usr/local/etc/php/extensions
-COPY ./extensions /usr/local/lib/php/extensions/no-debug-non-zts-20190902
+RUN docker-php-ext-configure gd \
+  --with-png-dir=/usr/include/ \
+  --with-jpeg-dir=/usr/include/ \
+  --with-freetype-dir=/usr/include/
 
+RUN docker-php-ext-configure zip --with-libzip
 
-RUN echo "deb http://mirrors.aliyun.com/debian/ buster main non-free contrib \n \
-    deb-src http://mirrors.aliyun.com/debian/ buster main non-free contrib \n \
-    deb http://mirrors.aliyun.com/debian-security buster/updates main \n \
-    deb-src http://mirrors.aliyun.com/debian-security buster/updates main \n \
-    deb http://mirrors.aliyun.com/debian/ buster-updates main non-free contrib \n \
-    deb-src http://mirrors.aliyun.com/debian/ buster-updates main non-free contrib \n \
-    deb http://mirrors.aliyun.com/debian/ buster-backports main non-free contrib \n \
-    deb-src http://mirrors.aliyun.com/debian/ buster-backports main non-free contrib" > /etc/apt/sources.list \
-    && apt-get update \
-    && apt-get install -y \
-        build-essential \
-        libmagickcore-dev \
-        libmagickwand-dev \
-        imagemagick \
-        libfreetype6-dev \
-        libjpeg62-turbo-dev \
-        libmcrypt-dev \
-        libpng-dev \
-    && docker-php-ext-install -j$(nproc) gd iconv pdo_mysql \
-    && pecl install redis-5.1.1 \
-    && pecl install imagick \
-    && pecl install mcrypt \
-    && docker-php-ext-enable redis imagick mcrypt
+RUN docker-php-ext-install gd intl pdo_mysql pdo_pgsql mysqli zip
+
+RUN pecl install imagick-3.4.3
+
+RUN pecl install xdebug && docker-php-ext-enable xdebug
+
+RUN docker-php-ext-enable imagick
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Clear package lists
+RUN apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+
+# Permissions
+RUN chown -R root:www-data /var/www/html
+RUN chmod u+rwx,g+rx,o+rx /var/www/html
+RUN find /var/www/html -type d -exec chmod u+rwx,g+rx,o+rx {} +
+RUN find /var/www/html -type f -exec chmod u+rw,g+rw,o+r {} +
+
+WORKDIR /var/www/html
+
+RUN a2enmod rewrite
+RUN a2enmod ssl
+
+EXPOSE 80
+EXPOSE 443
