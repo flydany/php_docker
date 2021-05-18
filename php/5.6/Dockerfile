@@ -1,8 +1,8 @@
-FROM php:7.4-fpm
+FROM php:5.6-fpm
 
 
 # COPY ./extensions /usr/local/etc/php/extensions
-COPY ./extensions /usr/local/lib/php/extensions/no-debug-non-zts-20190902
+COPY ./extensions /usr/local/lib/php/extensions
 
 
 RUN echo "deb http://mirrors.aliyun.com/debian/ buster main non-free contrib \n \
@@ -25,7 +25,7 @@ RUN echo "deb http://mirrors.aliyun.com/debian/ buster main non-free contrib \n 
         libmcrypt-dev \
         libpng-dev \
     && docker-php-ext-install -j$(nproc) gd iconv pdo_mysql \
-    && pecl install redis-5.1.1 \
+    && pecl install redis-2.2.5 \
     && pecl install imagick \
     && pecl install mcrypt \
     && docker-php-ext-enable redis imagick mcrypt
