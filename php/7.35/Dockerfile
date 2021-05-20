@@ -31,7 +31,7 @@ RUN apt-get update && apt-get install -y libwebp-dev libjpeg62-turbo-dev libpng-
     && docker-php-ext-install -j$(nproc) gd \
     # 删除安装包？
     && docker-php-source delete \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/sources.lists/*
 
 # 对其他容器开放9000端口
 EXPOSE 9000
