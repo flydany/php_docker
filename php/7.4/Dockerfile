@@ -28,4 +28,10 @@ RUN echo "deb http://mirrors.aliyun.com/debian/ buster main non-free contrib \n 
     && pecl install redis-5.1.1 \
     && pecl install imagick \
     && pecl install mcrypt \
-    && docker-php-ext-enable redis imagick mcrypt
+    && docker-php-ext-enable redis imagick mcrypt \
+    # 删除安装包？
+    && docker-php-source delete \
+    && rm -rf /var/lib/apt/sources.lists/*
+
+# 对其他容器开放9000端口
+EXPOSE 9000
